@@ -1,0 +1,30 @@
+{
+  "name": "roxy-ae-agent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Roxy AE Agent - AI production system for Adobe After Effects (MCP server + AE UXP plugin)",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @roxy/mcp-server && npm run build -w @roxy/ae-plugin",
+    "build:server": "npm run build -w @roxy/mcp-server",
+    "build:plugin": "npm run build -w @roxy/ae-plugin",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "diag": "node apps/mcp-server/dist/diag.js",
+    "smoke": "node apps/mcp-server/dist/smoke.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/ws": "^8.5.13",
+    "esbuild": "^0.28.2",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.3"
+  }
+}
