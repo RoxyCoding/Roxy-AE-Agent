@@ -1,0 +1,25 @@
+{
+  "name": "@roxy/mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MCP server for Roxy AE Agent (stdio) with a WebSocket bridge to the After Effects plugin",
+  "bin": {
+    "roxy-ae-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.3.1",
+    "@roxy/ae-protocol": "0.1.0",
+    "@roxy/ae-tools": "0.1.0",
+    "@roxy/mv-tools": "0.1.0",
+    "@roxy/preview-engine": "0.1.0",
+    "@roxy/project-validator": "0.1.0",
+    "@roxy/shared": "0.1.0",
+    "ws": "^8.18.0",
+    "zod": "^4.2.0"
+  }
+}

@@ -3,7 +3,7 @@
  *
  * Output format: `[ROXY][TAG] message {json}`
  * The sink is injectable: the MCP server MUST log to stderr (stdout is the MCP stdio channel),
- * the plugin logs to the UXP console and its panel.
+ * the plugin logs to the panel console and its log view.
  */
 
 export type LogLevel = "error" | "warn" | "info" | "debug";

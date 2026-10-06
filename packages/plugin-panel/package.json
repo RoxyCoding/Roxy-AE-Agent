@@ -1,0 +1,14 @@
+{
+  "name": "@roxy/plugin-panel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Panel UI + WebSocket connection shared by the UXP plugin and the CEP extension",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@roxy/ae-protocol": "0.1.0",
+    "@roxy/shared": "0.1.0"
+  }
+}

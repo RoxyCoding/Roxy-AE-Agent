@@ -13,17 +13,58 @@ declare const require: (id: string) => any;
 export type AE = any;
 
 let cachedApp: AE | null = null;
+let cachedModule: AE | null = null;
 
-/** `require("aftereffects")` returns the Application object (see API overview). */
-export function getApp(): AE {
-  if (cachedApp) return cachedApp;
+/** Inject the host Application object (tests, or an alternative executor). */
+export function setHostApp(app: AE | null): void {
+  cachedApp = app;
+  cachedModule = app;
+}
+
+/**
+ * The "aftereffects" module. On AE 27.0 (Beta) its own keys are `app`, the enums
+ * (KeyframeInterpolationType, ParagraphJustification, ...) and the classes - observed in the UXP log
+ * of Adobe's bundled AE MCP bridge plugin. The Application object is `module.app`.
+ */
+function getModule(): AE {
+  if (cachedModule) return cachedModule;
   try {
-    cachedApp = require("aftereffects");
+    cachedModule = require("aftereffects");
   } catch (e) {
     throw new RoxyError(ErrorCode.UNSUPPORTED, `Cannot load the "aftereffects" UXP module: ${(e as Error).message}`, {
       hint: "Run the plugin inside After Effects 27.0+ (UXP support).",
     });
   }
+  return cachedModule;
+}
+
+/** A host class exported by the "aftereffects" module (Shape, KeyframeEase, ImportOptions, ...). */
+export function hostClass(name: string): new (...args: any[]) => AE {
+  const C = getModule()?.[name] ?? (globalThis as any)[name];
+  if (typeof C !== "function") {
+    throw new RoxyError(ErrorCode.UNSUPPORTED, `${name} is not available in this After Effects build`);
+  }
+  return C;
+}
+
+/** Resolve an enum member by name or fail with the list of valid names. */
+export function requireEnumValue(enumName: string, key: string): number {
+  const e = getEnum(enumName);
+  if (!e) throw new RoxyError(ErrorCode.UNSUPPORTED, `${enumName} is not exposed by this After Effects build`);
+  const k = key.toUpperCase();
+  if (typeof e[k] !== "number") {
+    throw new RoxyError(ErrorCode.INVALID_ARGS, `Unknown ${enumName} "${key}"`, {
+      details: { valid: Object.keys(e).filter((n) => typeof e[n] === "number") },
+    });
+  }
+  return e[k];
+}
+
+/** The Application object (`require("aftereffects").app`, falling back to the module itself). */
+export function getApp(): AE {
+  if (cachedApp) return cachedApp;
+  const mod = getModule();
+  cachedApp = mod && mod.app ? mod.app : mod;
   return cachedApp;
 }
 
@@ -35,12 +76,11 @@ export function getProject(): AE {
 
 /**
  * Enumerations (KeyframeInterpolationType, ParagraphJustification, ...).
- * The early-preview docs list enum *names* but not how they are exposed in UXP, so we probe
- * the host module and the global scope. Callers must handle `undefined`.
+ * They are exported by the "aftereffects" module (AE 27.0 Beta); the Application object and the
+ * global scope are probed as fallbacks. Callers must handle `undefined`.
  */
 export function getEnum(name: string): Record<string, number> | undefined {
-  const app = getApp();
-  const candidates = [app?.[name], (globalThis as any)[name]];
+  const candidates = [getModule()?.[name], getApp()?.[name], (globalThis as any)[name]];
   for (const c of candidates) if (c && typeof c === "object") return c;
   return undefined;
 }

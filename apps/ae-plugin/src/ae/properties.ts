@@ -1,5 +1,5 @@
 import { ErrorCode, RoxyError, normalizePropertyPath, type PropertyPath } from "@roxy/ae-protocol";
-import { aeCall, safeGet, type AE } from "./host.js";
+import { aeCall, hostClass, safeGet, type AE } from "./host.js";
 
 /** Stable (unlocalized) matchNames of the standard layer groups and transform properties. */
 export const MN = {
@@ -165,8 +165,28 @@ export function describeProperty(p: AE, opts: { depth: number; time?: number; in
  *  - [x,y] for a 3-axis property -> current z appended
  *  - string / {text} for a Source Text property -> applied onto the current TextDocument
  */
+/** {vertices, inTangents?, outTangents?, closed?} -> host Shape (mask path / shape path values). */
+export function toHostShape(v: { vertices: number[][]; inTangents?: number[][]; outTangents?: number[][]; closed?: boolean }): AE {
+  const Shape = hostClass("Shape");
+  const s = new Shape();
+  const zeros = v.vertices.map(() => [0, 0]);
+  s.vertices = v.vertices;
+  s.inTangents = v.inTangents ?? zeros;
+  s.outTangents = v.outTangents ?? zeros;
+  s.closed = v.closed ?? true;
+  return s;
+}
+
+function isShapeValue(v: unknown): v is { vertices: number[][] } {
+  return !!v && typeof v === "object" && Array.isArray((v as { vertices?: unknown }).vertices);
+}
+
 export function coerceValue(prop: AE, value: unknown, warn: (m: string) => void): unknown {
   const current = safeGet(() => prop.value, undefined);
+  // Mask Path / shape Path: the current value is a Shape (has vertices).
+  if (isShapeValue(value) && current && typeof current === "object" && Array.isArray(safeGet(() => (current as AE).vertices, undefined))) {
+    return toHostShape(value as never);
+  }
   if (Array.isArray(current)) {
     if (typeof value === "number") return current.map(() => value);
     if (Array.isArray(value) && value.length < current.length) {

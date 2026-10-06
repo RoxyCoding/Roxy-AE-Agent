@@ -20,7 +20,7 @@ export const CompSelectorObject = z
 export const CompSelector = z.union([z.string(), z.number().int(), CompSelectorObject]);
 export type CompSelector = z.infer<typeof CompSelector>;
 
-export const LayerType = z.enum(["text", "shape", "camera", "light", "null", "adjustment", "precomp", "footage", "solid", "av", "unknown"]);
+export const LayerType = z.enum(["text", "shape", "camera", "light", "null", "adjustment", "precomp", "footage", "audio", "solid", "av", "unknown"]);
 export type LayerType = z.infer<typeof LayerType>;
 
 export const LayerSelectorObject = z

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Chrome DevTools for the panel: open http://localhost:8099 while AE is running (PlayerDebugMode=1). -->
+<ExtensionList>
+  <Extension Id="com.roxy.aeagent.cep.panel">
+    <HostList>
+      <Host Name="AEFT" Port="8099"/>
+    </HostList>
+  </Extension>
+</ExtensionList>

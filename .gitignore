@@ -4,3 +4,4 @@ dist/
 .roxy/
 previews/
 .DS_Store
+release/

@@ -10,6 +10,8 @@ export interface DiagnosticsSnapshot {
   footage: DiagFootage[];
   /** Comps whose layer list was truncated by maxLayersPerComp. */
   truncatedComps: number[];
+  /** matchNames of all installed effects (app.effects), used to detect missing effects. Absent if unavailable. */
+  installedEffects?: string[];
 }
 
 export interface DiagComp {

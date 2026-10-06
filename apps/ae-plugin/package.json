@@ -1,0 +1,21 @@
+{
+  "name": "@roxy/ae-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "After Effects UXP plugin - execution layer for Roxy AE Agent",
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "node build.mjs --watch",
+    "package": "node package.mjs",
+    "install-ccx": "node install-ccx.mjs",
+    "sideload": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/sideload.ps1",
+    "unsideload": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/sideload.ps1 -Remove"
+  },
+  "dependencies": {
+    "@roxy/ae-protocol": "0.1.0",
+    "@roxy/plugin-panel": "0.1.0",
+    "@roxy/shared": "0.1.0",
+    "zod": "^4.2.0"
+  }
+}

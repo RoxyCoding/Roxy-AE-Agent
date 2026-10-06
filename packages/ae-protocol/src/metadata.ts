@@ -4,7 +4,7 @@ import * as z from "zod/v4";
  * Roxy Metadata - attached to comps/layers that Roxy creates or manages.
  *
  * Persistence (Phase 1): stored inside the AE `comment` attribute of the CompItem / Layer
- * (documented RW string in the AE UXP API, saved with the .aep, survives restarts).
+ * (documented read/write string in the AE scripting API, saved with the .aep, survives restarts).
  * The metadata lives on a single dedicated line so any user-written comment is preserved:
  *
  *   <user comment...>

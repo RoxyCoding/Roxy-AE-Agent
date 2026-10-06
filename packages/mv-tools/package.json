@@ -1,0 +1,14 @@
+{
+  "name": "@roxy/mv-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@roxy/ae-protocol": "0.1.0",
+    "@roxy/ae-tools": "0.1.0",
+    "zod": "^4.2.0"
+  }
+}

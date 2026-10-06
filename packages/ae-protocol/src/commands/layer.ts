@@ -135,6 +135,7 @@ export const propertySet = defineCommand({
     value: z.unknown().optional().describe("number, number[] (vectors/colors), string for text, or {text,...} for Source Text"),
     time: z.number().min(0).optional(),
     expression: z.string().optional().describe("Expression source. Empty string removes the expression"),
+    expressionEnabled: z.boolean().optional().describe("Enable/disable the existing expression without deleting it"),
   }),
   mutates: true,
 });
@@ -143,6 +144,10 @@ const keyframe = z.object({
   time: z.number().min(0),
   value: z.unknown(),
   interpolation: z.enum(["linear", "bezier", "hold"]).optional(),
+  ease: z
+    .enum(["easyEase", "easeIn", "easeOut"])
+    .optional()
+    .describe("Temporal ease (Bezier, influence 33.3%). easeIn = ease into this key, easeOut = ease out of it"),
 });
 
 export const keyframeAdd = defineCommand({

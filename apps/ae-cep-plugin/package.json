@@ -1,0 +1,17 @@
+{
+  "name": "@roxy/ae-cep-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "After Effects 2024-2026 CEP extension (ExtendScript host) - execution layer for Roxy AE Agent",
+  "scripts": {
+    "build": "node build.mjs",
+    "install-ext": "powershell -ExecutionPolicy Bypass -File scripts/install.ps1"
+  },
+  "dependencies": {
+    "@roxy/ae-protocol": "0.1.0",
+    "@roxy/plugin-panel": "0.1.0",
+    "@roxy/shared": "0.1.0",
+    "zod": "^4.2.0"
+  }
+}

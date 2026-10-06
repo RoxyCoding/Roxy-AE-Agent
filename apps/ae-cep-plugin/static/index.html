@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { font-family: sans-serif; font-size: 12px; color: #ddd; background: #232323; margin: 8px; }
+      h1 { font-size: 13px; margin: 0 0 6px 0; }
+      .row { display: flex; align-items: center; margin: 4px 0; }
+      .row label { width: 48px; }
+      .row input[type="text"], .row input[type="password"] { flex: 1; }
+      button { margin-right: 6px; }
+      .status { padding: 4px 6px; border-radius: 3px; margin: 6px 0; background: #444; }
+      .status.connected { background: #24572f; }
+      .status.connecting { background: #5a4b1d; }
+      .status.rejected { background: #6b2323; }
+      #host { color: #999; font-size: 11px; }
+      #log { height: 180px; overflow-y: auto; background: #1a1a1a; padding: 4px; font-family: monospace; font-size: 10px; white-space: pre-wrap; }
+      #log .err { color: #ff8080; }
+    </style>
+  </head>
+  <body>
+    <h1>Roxy AE Agent</h1>
+    <div id="host"></div>
+    <div id="status" class="status disconnected">disconnected</div>
+    <div class="row"><label for="port">Port</label><input id="port" type="text" /></div>
+    <div class="row"><label for="token">Token</label><input id="token" type="password" placeholder="(optional)" /></div>
+    <div class="row">
+      <button id="connect">Connect</button>
+      <button id="disconnect">Disconnect</button>
+      <label><input id="debug" type="checkbox" /> debug log</label>
+    </div>
+    <div id="log"></div>
+    <script src="main.js"></script>
+  </body>
+</html>

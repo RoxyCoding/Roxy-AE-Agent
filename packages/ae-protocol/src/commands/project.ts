@@ -8,6 +8,7 @@ export const systemPing = defineCommand({
   description: "Round-trip check to the AE plugin. Returns host app/version info.",
   args: z.object({}),
   mutates: false,
+  internal: true, // exposed through ae_status
 });
 
 export const projectGetState = defineCommand({

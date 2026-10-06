@@ -68,6 +68,37 @@ export function resolveComp(selector: CompSelector | undefined): AE {
   return pickOne(matches, "composition", sel, compRef, () => allComps().slice(0, 30).map(compRef));
 }
 
+/** AV items (footage, comps) that can become layers. Folders have no duration. */
+export function allAvItems(): AE[] {
+  const project = getProject();
+  const out: AE[] = [];
+  for (let i = 1; i <= project.numItems; i++) {
+    const item = safeGet(() => project.item(i), null);
+    if (item && typeof safeGet(() => item.duration, undefined) === "number") out.push(item);
+  }
+  return out;
+}
+
+export function itemSummary(item: AE) {
+  return {
+    id: item.id as number,
+    name: item.name as string,
+    kind: isComp(item) ? "comp" : "footage",
+    duration: safeGet(() => item.duration, 0) as number,
+    width: safeGet(() => item.width, undefined) as number | undefined,
+    height: safeGet(() => item.height, undefined) as number | undefined,
+    hasAudio: safeGet(() => item.hasAudio, undefined) as boolean | undefined,
+    hasVideo: safeGet(() => item.hasVideo, undefined) as boolean | undefined,
+  };
+}
+
+export function resolveItem(selector: string | number | { id?: number; name?: string }): AE {
+  const sel = typeof selector === "string" ? { name: selector } : typeof selector === "number" ? { id: selector } : selector;
+  const items = allAvItems();
+  const matches = items.filter((i) => (sel.id === undefined || i.id === sel.id) && (sel.name === undefined || i.name === sel.name));
+  return pickOne(matches, "project item", sel, itemSummary, () => items.slice(0, 30).map(itemSummary));
+}
+
 export function layerType(layer: AE): string {
   const mn = safeGet<string>(() => layer.matchName, "");
   switch (mn) {
@@ -85,6 +116,7 @@ export function layerType(layer: AE): string {
   const source = safeGet(() => layer.source, null);
   if (source) {
     if (isComp(source)) return "precomp";
+    if (safeGet(() => source.hasAudio, false) && !safeGet(() => source.hasVideo, true)) return "audio";
     // SolidSource exposes `color`; files expose `file`.
     const main = safeGet(() => source.mainSource, null);
     if (main && safeGet(() => main.color, undefined) !== undefined) return "solid";

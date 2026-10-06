@@ -1,0 +1,16 @@
+{
+  "name": "@roxy/ae-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@roxy/ae-protocol": "0.1.0",
+    "@roxy/preview-engine": "0.1.0",
+    "@roxy/project-validator": "0.1.0",
+    "@roxy/shared": "0.1.0",
+    "zod": "^4.2.0"
+  }
+}
